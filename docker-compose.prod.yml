@@ -1,0 +1,61 @@
+version: '3.8'
+
+# Production-specific overrides
+services:
+  frontend:
+    build:
+      target: production
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+
+  backend:
+    build:
+      target: production
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=false
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  db:
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=resume_tailor_prod
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+  redis:
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+
+  # Use GPU profile for production if available
+  ollama:
+    restart: unless-stopped
+    profiles:
+      - ""  # Enable by default in prod
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+
+  nginx:
+    restart: unless-stopped
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro

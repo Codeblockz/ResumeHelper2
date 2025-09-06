@@ -1,0 +1,18 @@
+version: '3.8'
+
+# Override for using local Ollama instead of containerized version
+services:
+  backend:
+    environment:
+      - OLLAMA_URL=http://host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+# Remove Ollama services entirely
+  ollama:
+    profiles:
+      - disabled
+
+  ollama-cpu: 
+    profiles:
+      - disabled

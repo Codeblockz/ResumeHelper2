@@ -1,0 +1,37 @@
+version: '3.8'
+
+# Development-specific overrides
+services:
+  frontend:
+    build:
+      target: development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - CHOKIDAR_USEPOLLING=true
+
+  backend:
+    build:
+      target: development
+    volumes:
+      - ./backend:/app
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - RELOAD=true
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  db:
+    environment:
+      - POSTGRES_DB=resume_tailor_dev
+    volumes:
+      - ./docker/postgres/init-dev.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # Use CPU profile for development to avoid GPU requirements
+  ollama-cpu:
+    profiles:
+      - ""  # Enable by default in dev
