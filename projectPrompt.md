@@ -34,7 +34,7 @@ Create a web-based resume tailoring application that uses Ollama (local LLM) to 
 - **File Storage**: Local file system or cloud storage for resume files
 
 ### Frontend Requirements
-- **Framework**: React, Vue.js, or Svelte
+- **Framework**: Next js.
 - **UI Components**: Modern, clean interface with drag-and-drop functionality
 - **Real-time updates**: Show tailoring progress and suggestions
 - **Preview system**: Side-by-side comparison of original vs. tailored resume
